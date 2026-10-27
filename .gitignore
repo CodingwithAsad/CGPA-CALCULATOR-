@@ -1,18 +1,82 @@
-*/config/development
-*/logs/log-*.php
-!*/logs/index.html
-*/cache/*
-!system/cache/*
-!*/cache/index.html
-!*/cache/.htaccess
 
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
+#include <iostream>
+#include <iomanip>
+using namespace std;
 
-#codeigniter 3
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
-/vendor/
+int main()
+{
+    int courses;
+    double grade, creditHours;
+    double totalCredits = 0;
+    double totalGradePoints = 0;
+
+    double previousCredits, previousCGPA;
+    double semesterGPA, overallCGPA;
+
+    cout << "===== CGPA CALCULATOR =====\n";
+
+    cout << "Enter number of courses: ";
+    cin >> courses;
+
+    if (courses <= 0)
+    {
+        cout << "Invalid number of courses.\n";
+        return 0;
+    }
+
+    for (int i = 1; i <= courses; i++)
+    {
+        cout << "\nCourse " << i << '\n';
+
+        cout << "Enter grade points: ";
+        cin >> grade;
+
+        cout << "Enter credit hours: ";
+        cin >> creditHours;
+
+        if (grade < 0 || creditHours <= 0)
+        {
+            cout << "Invalid grade or credit hours.\n";
+            return 0;
+        }
+
+        totalCredits += creditHours;
+        totalGradePoints += grade * creditHours;
+
+        cout << "Course " << i
+             << " Grade Points: " << grade << '\n';
+    }
+
+    semesterGPA = totalGradePoints / totalCredits;
+
+    cout << "\nEnter previous completed credit hours: ";
+    cin >> previousCredits;
+
+    cout << "Enter previous CGPA: ";
+    cin >> previousCGPA;
+
+    if (previousCredits < 0 || previousCGPA < 0 ||
+        (previousCredits == 0 && previousCGPA != 0))
+    {
+        cout << "Invalid previous academic record.\n";
+        return 0;
+    }
+
+    double cumulativeCredits = previousCredits + totalCredits;
+
+    double cumulativeGradePoints =
+        (previousCGPA * previousCredits) + totalGradePoints;
+
+    overallCGPA = cumulativeGradePoints / cumulativeCredits;
+
+    cout << fixed << setprecision(2);
+
+    cout << "\n===== FINAL RESULT =====\n";
+    cout << "Total Courses: " << courses << '\n';
+    cout << "Total Credits: " << totalCredits << '\n';
+    cout << "Total Grade Points: " << totalGradePoints << '\n';
+    cout << "Semester GPA: " << semesterGPA << '\n';
+    cout << "Overall CGPA: " << overallCGPA << '\n';
+
+    return 0;
+}
